@@ -1,0 +1,9 @@
+name = "appointment-booking-app"
+compatibility_date = "2024-09-23"
+pages_build_output_dir = "public"
+
+# Secrets (GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_PRIVATE_KEY, GOOGLE_SHEET_ID,
+# RESEND_API_KEY, RESEND_FROM_EMAIL, OWNER_EMAIL, BUSINESS_NAME) are NOT set
+# here — never commit real secrets to this file. Set them in the Cloudflare
+# Pages dashboard under Settings -> Environment Variables (see README.md),
+# or locally for `wrangler pages dev` via a .dev.vars file (also gitignored).

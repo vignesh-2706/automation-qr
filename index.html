@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<title>Book an appointment</title>
+<meta name="description" content="Book your appointment online in under a minute." />
+
+<!-- Tailwind via CDN: build-less, keeps the app tiny and fast on mobile -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink: '#1C2B29',
+          paper: '#FAF7F1',
+          accent: '#9C6B3F',
+          accentSoft: '#EFE3D0',
+          sage: '#55705F',
+          line: '#E2DCCF',
+          danger: '#A6432F',
+        },
+        fontFamily: {
+          display: ['Fraunces', 'serif'],
+          sans: ['Inter', 'sans-serif'],
+        },
+      },
+    },
+  };
+</script>
+</head>
+<body class="bg-paper text-ink font-sans antialiased min-h-screen">
+
+  <div class="max-w-md mx-auto min-h-screen flex flex-col">
+
+    <!-- Header + progress -->
+    <header class="px-6 pt-8 pb-5">
+      <p class="font-display text-2xl" id="business-name">Book your visit</p>
+      <div class="mt-5 flex gap-1.5" id="progress-track" aria-hidden="true">
+        <span class="h-[3px] flex-1 rounded-full bg-line progress-seg" data-step="1"></span>
+        <span class="h-[3px] flex-1 rounded-full bg-line progress-seg" data-step="2"></span>
+        <span class="h-[3px] flex-1 rounded-full bg-line progress-seg" data-step="3"></span>
+        <span class="h-[3px] flex-1 rounded-full bg-line progress-seg" data-step="4"></span>
+      </div>
+    </header>
+
+    <main class="flex-1 px-6 pb-8 flex flex-col">
+
+      <!-- STEP 1: Service selection -->
+      <section id="step-1" class="wizard-step flex-1 flex flex-col">
+        <h1 class="font-display text-[1.7rem] leading-tight">Choose a service</h1>
+        <p class="text-ink/60 text-sm mt-1.5 mb-6">Prices and durations are shown up front — no surprises.</p>
+
+        <div id="service-list" class="space-y-3 flex-1">
+          <!-- Loading skeletons -->
+          <div class="skeleton h-[74px] rounded-2xl"></div>
+          <div class="skeleton h-[74px] rounded-2xl"></div>
+          <div class="skeleton h-[74px] rounded-2xl"></div>
+        </div>
+      </section>
+
+      <!-- STEP 2: Date & time -->
+      <section id="step-2" class="wizard-step hidden flex-1 flex flex-col">
+        <button type="button" class="back-btn" data-back="1">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Service
+        </button>
+        <h1 class="font-display text-[1.7rem] leading-tight mt-3">Pick a day &amp; time</h1>
+        <p class="text-ink/60 text-sm mt-1.5 mb-5">Selected: <span id="selected-service-label" class="text-ink font-medium">—</span></p>
+
+        <div id="day-picker" class="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1"></div>
+
+        <div class="mt-6 flex-1">
+          <p class="text-xs uppercase tracking-wide text-ink/45 mb-3" id="slots-heading">Available times</p>
+          <div id="slots-grid" class="grid grid-cols-3 gap-2.5">
+            <div class="skeleton h-11 rounded-xl"></div>
+            <div class="skeleton h-11 rounded-xl"></div>
+            <div class="skeleton h-11 rounded-xl"></div>
+            <div class="skeleton h-11 rounded-xl"></div>
+            <div class="skeleton h-11 rounded-xl"></div>
+            <div class="skeleton h-11 rounded-xl"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 3: Client details -->
+      <section id="step-3" class="wizard-step hidden flex-1 flex flex-col">
+        <button type="button" class="back-btn" data-back="2">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Date &amp; time
+        </button>
+        <h1 class="font-display text-[1.7rem] leading-tight mt-3">Your details</h1>
+        <p class="text-ink/60 text-sm mt-1.5 mb-6" id="booking-summary">—</p>
+
+        <form id="details-form" class="space-y-4 flex-1 flex flex-col" novalidate>
+          <div>
+            <label for="client-name" class="block text-sm font-medium mb-1.5">Full name</label>
+            <input id="client-name" name="name" type="text" required autocomplete="name"
+              class="w-full rounded-xl border border-line bg-white px-4 py-3 text-[15px] outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition" placeholder="Priya Sharma" />
+          </div>
+          <div>
+            <label for="client-phone" class="block text-sm font-medium mb-1.5">Phone number</label>
+            <input id="client-phone" name="phone" type="tel" required autocomplete="tel"
+              class="w-full rounded-xl border border-line bg-white px-4 py-3 text-[15px] outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition" placeholder="98765 43210" />
+          </div>
+          <div>
+            <label for="client-email" class="block text-sm font-medium mb-1.5">Email</label>
+            <input id="client-email" name="email" type="email" required autocomplete="email"
+              class="w-full rounded-xl border border-line bg-white px-4 py-3 text-[15px] outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition" placeholder="priya@email.com" />
+          </div>
+
+          <p id="form-error" class="hidden text-sm text-danger bg-danger/10 rounded-xl px-4 py-3"></p>
+
+          <div class="flex-1"></div>
+          <button type="submit" id="submit-btn"
+            class="w-full bg-ink text-paper rounded-xl py-3.5 font-medium text-[15px] transition active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none">
+            Confirm booking
+          </button>
+        </form>
+      </section>
+
+      <!-- STEP 4: Success -->
+      <section id="step-4" class="wizard-step hidden flex-1 flex flex-col items-center justify-center text-center">
+        <div class="success-badge w-20 h-20 rounded-full bg-sage/15 flex items-center justify-center mb-6">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none"><path d="M5 12.5L10 17.5L19 7.5" stroke="#55705F" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h1 class="font-display text-2xl leading-tight">You're booked</h1>
+        <p class="text-ink/60 text-sm mt-2 max-w-[26ch]" id="success-summary">A confirmation has been sent to your email.</p>
+
+        <a id="ics-link" href="#" download="appointment.ics"
+          class="mt-8 inline-flex items-center gap-2 border border-line rounded-xl px-5 py-3 text-[15px] font-medium hover:bg-accentSoft/40 transition">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M8 2v4M16 2v4M3.5 9h17M5 5h14a1.5 1.5 0 011.5 1.5V19a1.5 1.5 0 01-1.5 1.5H5A1.5 1.5 0 013.5 19V6.5A1.5 1.5 0 015 5z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Add to calendar
+        </a>
+
+        <button type="button" id="book-another" class="mt-4 text-sm text-ink/50 underline underline-offset-2">
+          Book another appointment
+        </button>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
