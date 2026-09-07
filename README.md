@@ -290,7 +290,7 @@ redeploys automatically within a minute or two.
 
 **"Missing GOOGLE_SERVICE_ACCOUNT_EMAIL or GOOGLE_PRIVATE_KEY" error**
 The environment variables aren't set (or aren't set for the right
-environment — Production vs Preview). Double check Part 4.2.
+environment — Production vs Preview). Double check Part 4.2 - Done
 
 **Calendar events aren't being created / freebusy always looks empty**
 The calendar almost certainly isn't shared with the service account yet.
