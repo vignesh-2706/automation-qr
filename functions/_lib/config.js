@@ -21,7 +21,7 @@ export const BUSINESS_CONFIG = {
   // Google Calendar to check/write. "primary" is the service account's
   // own calendar; more commonly you'll share a specific calendar with the
   // service account and put its ID here (looks like an email address).
-  calendarId: "primary",
+  calendarId: "025405bf2501cf4392cac192baf536ea761b953befa5df8f24294bf6d59246ee@group.calendar.google.com",
 
   // Google Sheet used as the CRM log.
   sheetRange: "Bookings!A:F",

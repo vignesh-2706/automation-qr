@@ -14,16 +14,21 @@
  *   ]);
  */
 
-// Cache the token in memory for the lifetime of the Worker isolate so we
-// don't re-mint a new one on every single request.
-let cachedToken = null;
-let cachedTokenExpiry = 0;
+// Cache tokens in memory for the lifetime of the Worker isolate so we
+// don't re-mint one on every request. Keyed by the exact scope set, since
+// a token minted for Calendar has no permission to call Sheets (and vice
+// versa) — reusing one across different scopes causes a 403
+// ACCESS_TOKEN_SCOPE_INSUFFICIENT error that looks like a sharing/permissions
+// problem but isn't.
+const tokenCache = new Map(); // scopeKey -> { token, expiry }
 
 export async function getGoogleAccessToken(env, scopes) {
   const now = Math.floor(Date.now() / 1000);
+  const scopeKey = [...scopes].sort().join(" ");
+  const cached = tokenCache.get(scopeKey);
 
-  if (cachedToken && cachedTokenExpiry - 60 > now) {
-    return cachedToken;
+  if (cached && cached.expiry - 60 > now) {
+    return cached.token;
   }
 
   const email = env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
@@ -57,9 +62,9 @@ export async function getGoogleAccessToken(env, scopes) {
   }
 
   const data = await res.json();
-  cachedToken = data.access_token;
-  cachedTokenExpiry = now + (data.expires_in || 3600);
-  return cachedToken;
+  const token = data.access_token;
+  tokenCache.set(scopeKey, { token, expiry: now + (data.expires_in || 3600) });
+  return token;
 }
 
 // Environment variables can't contain real newlines in most dashboards, so
